@@ -34,6 +34,28 @@ Member.get = function(memberId, cb) {
     })
 }
 
+Member.getByAccount = function(memberAccount, cb) {
+  //這邊是當傳入一個memberId時，進入資料庫查出相對應的member資料
+  db.select()
+    .from('member')
+    .where({
+      account : memberAccount
+    })
+    .map(function(row) {
+      return new Member(row);
+    })
+    .then(function(memberList) {
+      if(memberList.length) {
+        cb(null, memberList[0]);
+      } else {
+        cb(new GeneralErrors.NotFound());
+      }
+    })
+    .catch(function(err) {
+      cb(err);
+    })
+}
+
 //我們接下來嘗試是否可以正確取得資料
 //接下來完成其他會用到的function
 //Instance Function
